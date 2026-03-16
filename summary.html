@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Sales Summary - Luxe POS</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3274e7",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#111721",
+                    },
+                    fontFamily: { "display": ["Inter"] },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(50, 116, 231, 0.2); border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display min-h-screen flex overflow-hidden">
+    <!-- Sidebar -->
+    <aside class="w-64 border-r border-slate-200 dark:border-slate-800 bg-background-light dark:bg-background-dark flex flex-col h-screen shrink-0">
+        <div class="p-6 flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white">
+                <span class="material-symbols-outlined">restaurant_menu</span>
+            </div>
+            <div>
+                <h1 class="text-lg font-bold tracking-tight">LUXE POS</h1>
+                <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">PREMIUM EDITION</p>
+            </div>
+        </div>
+        <nav class="flex-1 px-4 py-4 space-y-2 overflow-y-auto custom-scrollbar">
+            <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all" href="pos.html">
+                <span class="material-symbols-outlined">receipt_long</span>
+                <span class="font-medium">POS Terminal</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all" href="menu.html">
+                <span class="material-symbols-outlined">menu_book</span>
+                <span class="font-medium">Manage Menu</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all" href="room_history.html">
+                <span class="material-symbols-outlined">history</span>
+                <span class="font-medium">History</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all" href="outside_pos.html">
+                <span class="material-symbols-outlined">local_shipping</span>
+                <span class="font-medium">Outside Bill</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all" href="add_rooms.html">
+                <span class="material-symbols-outlined">door_front</span>
+                <span class="font-medium">Manage Rooms</span>
+            </a>
+        </nav>
+        <div class="p-6 border-t border-slate-200 dark:border-slate-800 space-y-2">
+            <a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/10 text-primary border border-primary/20" href="summary.html">
+                <span class="material-symbols-outlined">analytics</span>
+                <span class="font-medium">Summary</span>
+            </a>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col h-screen overflow-hidden p-6 lg:p-10">
+        <header class="mb-6 shrink-0">
+            <h2 class="text-2xl font-bold tracking-tight">Monthly Insights</h2>
+            <p class="text-slate-500 mt-2 text-sm">Track business performance and sales trends</p>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 shrink-0">
+            <div class="glass p-6 rounded-2xl">
+                <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Total Revenue</p>
+                <p class="text-2xl font-black text-primary" id="totalRevenue">Rs. 0</p>
+            </div>
+            <div class="glass p-6 rounded-2xl">
+                <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Total Sales</p>
+                <p class="text-2xl font-black text-slate-200" id="totalCount">0</p>
+            </div>
+            <div class="glass p-6 rounded-2xl">
+                <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Best Selling Type</p>
+                <p class="text-2xl font-black text-slate-200" id="bestType">---</p>
+            </div>
+        </div>
+
+        <div class="glass rounded-2xl overflow-hidden flex-1 flex flex-col mb-4">
+            <div class="px-8 py-6 border-b border-white/5 bg-white/5 shrink-0">
+                <h3 class="font-bold">Recent Transactions</h3>
+            </div>
+            <div class="flex-1 overflow-y-auto custom-scrollbar">
+                <div class="min-w-full inline-block align-middle">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="sticky top-0 bg-slate-900/50 backdrop-blur-md z-10">
+                            <tr class="text-xs font-bold text-slate-500 uppercase tracking-widest border-b border-white/5">
+                                <th class="px-6 py-3">Date</th>
+                                <th class="px-6 py-3">Invoice</th>
+                                <th class="px-6 py-3">Context</th>
+                                <th class="px-6 py-3 text-right">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody id="salesList">
+                            <!-- Rows loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDXXbo3H7h7zbKcvEuNgYH6sFVLhqkjpOo",
+            authDomain: "pos-elegant.firebaseapp.com",
+            databaseURL: "https://pos-elegant-default-rtdb.firebaseio.com/",
+            projectId: "pos-elegant",
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        const totalRevenue = document.getElementById("totalRevenue");
+        const totalCount = document.getElementById("totalCount");
+        const salesList = document.getElementById("salesList");
+
+        onValue(ref(db, "sales"), snapshot => {
+            salesList.innerHTML = "";
+            let revenue = 0;
+            let count = 0;
+            const now = new Date();
+
+            snapshot.forEach(child => {
+                const sale = child.val();
+                const date = new Date(sale.timestamp);
+                
+                // Show current month only
+                if (date.getMonth() === now.getMonth()) {
+                    revenue += sale.total;
+                    count++;
+
+                    const tr = document.createElement("tr");
+                    tr.className = "border-b border-white/5 hover:bg-white/5 transition-all";
+                    tr.innerHTML = `
+                        <td class="px-6 py-3 text-sm whitespace-nowrap">${date.toLocaleString()}</td>
+                        <td class="px-6 py-3 font-mono text-xs text-primary">${sale.invoice || 'WALK-IN'}</td>
+                        <td class="px-6 py-3 text-sm">${sale.room ? 'Room ' + sale.room : 'Outside Guest'}</td>
+                        <td class="px-6 py-3 text-sm font-bold text-right">Rs. ${parseFloat(sale.total).toLocaleString()}</td>
+                    `;
+                    salesList.prepend(tr);
+                }
+            });
+
+            totalRevenue.innerText = "Rs. " + revenue.toLocaleString();
+            totalCount.innerText = count.toLocaleString();
+        });
+    </script>
+</body>
+</html>

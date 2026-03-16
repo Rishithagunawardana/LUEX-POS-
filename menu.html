@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Manage Menu - Luxe POS</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3274e7",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#111721",
+                    },
+                    fontFamily: { "display": ["Inter"] },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(50, 116, 231, 0.2); border-radius: 10px; }
+        .dark select option { background-color: #111721; color: #f1f5f9; }
+        select { appearance: none; background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2394a3b8' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e"); background-position: right 1rem center; background-repeat: no-repeat; background-size: 1.5em 1.5em; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display min-h-screen flex overflow-hidden">
+    <!-- Sidebar (Same as pos.html) -->
+    <aside class="w-64 border-r border-slate-200 dark:border-slate-800 bg-background-light dark:bg-background-dark flex flex-col h-screen shrink-0">
+        <div class="p-6 flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white">
+                <span class="material-symbols-outlined">restaurant_menu</span>
+            </div>
+            <div>
+                <h1 class="text-lg font-bold tracking-tight">LUXE POS</h1>
+                <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">PREMIUM EDITION</p>
+            </div>
+        </div>
+        <nav class="flex-1 px-4 py-4 space-y-2 overflow-y-auto custom-scrollbar">
+            <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all" href="pos.html">
+                <span class="material-symbols-outlined">receipt_long</span>
+                <span class="font-medium">POS Terminal</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/10 text-primary border border-primary/20" href="menu.html">
+                <span class="material-symbols-outlined">menu_book</span>
+                <span class="font-medium">Manage Menu</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all" href="room_history.html">
+                <span class="material-symbols-outlined">history</span>
+                <span class="font-medium">History</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all" href="outside_pos.html">
+                <span class="material-symbols-outlined">local_shipping</span>
+                <span class="font-medium">Outside Bill</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all" href="add_rooms.html">
+                <span class="material-symbols-outlined">door_front</span>
+                <span class="font-medium">Manage Rooms</span>
+            </a>
+        </nav>
+    </aside>
+
+    <main class="flex-1 overflow-y-auto p-6 lg:p-10 custom-scrollbar">
+        <header class="mb-6">
+            <h2 class="text-2xl font-bold tracking-tight">Manage Menu</h2>
+            <p class="text-slate-500 mt-2 text-sm">Add or update your restaurant's offerings</p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+            <!-- Form (Now on the left) -->
+            <div class="lg:col-span-1 order-1 lg:order-1">
+                <div class="glass p-6 rounded-2xl sticky top-6">
+                    <h3 class="text-lg font-bold mb-4">Add New Item</h3>
+                    <!-- Form content preserved -->
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-400 mb-2">Item Name</label>
+                            <input class="w-full glass border-none rounded-xl py-3 px-4 focus:ring-2 focus:ring-primary text-slate-900 dark:text-slate-100" id="itemName" placeholder="e.g. Wagyu Ribeye" type="text"/>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-400 mb-2">Price (Rs.)</label>
+                            <input class="w-full glass border-none rounded-xl py-3 px-4 focus:ring-2 focus:ring-primary text-slate-900 dark:text-slate-100" id="itemPrice" placeholder="0.00" type="number"/>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-400 mb-2">Category</label>
+                            <select class="w-full glass border-none rounded-xl py-3 px-4 focus:ring-2 focus:ring-primary text-slate-900 dark:text-slate-100" id="itemCategory">
+                                <option value="Food">Food</option>
+                                <option value="Beverage">Beverage</option>
+                                <option value="Spa">Spa</option>
+                                <option value="Laundry">Laundry</option>
+                                <option value="Shop">Shop</option>
+                                <option value="Photoshoot">Photoshoot</option>
+                                <option value="Transport">Transport</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-400 mb-2">Item Image</label>
+                            <input class="w-full glass border-none rounded-xl py-3 px-4 focus:ring-2 focus:ring-primary file:bg-primary/20 file:text-primary file:text-xs file:font-bold file:border-none file:rounded-lg file:px-3 file:py-1 file:mr-4 file:cursor-pointer hover:file:bg-primary/30 transition-all" id="itemImage" type="file" accept="image/*"/>
+                        </div>
+                        
+                        <!-- Progress Bar -->
+                        <div class="hidden space-y-2" id="uploadProgressContainer">
+                            <div class="flex justify-between text-[10px] font-bold text-primary uppercase tracking-widest">
+                                <span id="progressLabel">Uploading</span>
+                                <span id="uploadPercentage">0%</span>
+                            </div>
+                            <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                                <div class="h-full bg-primary transition-all duration-300" id="uploadProgressBar" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <button class="w-full py-4 rounded-xl bg-primary text-white font-bold hover:bg-primary/90 transition-all mt-4 shadow-lg shadow-primary/20" id="addItemBtn">Add to Menu</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- List (Now on the right) -->
+            <div class="lg:col-span-2 order-2 lg:order-2">
+                <div class="glass p-6 lg:p-10 rounded-2xl flex flex-col h-[75vh]">
+                    <div class="flex items-center justify-between mb-8 shrink-0">
+                        <h3 class="text-xl font-bold">Current Offerings</h3>
+                        <div class="text-xs font-bold text-slate-500 uppercase tracking-widest hidden sm:block" id="itemsCountDisplay">0 Items</div>
+                    </div>
+                    <!-- Scrollable Area -->
+                    <div class="flex-1 overflow-y-auto pr-4 custom-scrollbar space-y-4" id="menuItemsContainer">
+                        <div class="space-y-4" id="menuItemsList">
+                            <!-- Items will be loaded here -->
+                        </div>
+                        <!-- Sentinel for Lazy Loading -->
+                        <div id="scrollSentinel" class="h-10 flex items-center justify-center">
+                            <div class="w-6 h-6 border-2 border-primary/30 border-t-primary rounded-full animate-spin hidden" id="lazyLoader"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hidden input for updating photos -->
+        <input class="hidden" id="updateImageInput" type="file" accept="image/*"/>
+    </main>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+        import { getDatabase, ref as dbRef, onValue, push, remove, update } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDXXbo3H7h7zbKcvEuNgYH6sFVLhqkjpOo",
+            authDomain: "pos-elegant.firebaseapp.com",
+            databaseURL: "https://pos-elegant-default-rtdb.firebaseio.com/",
+            projectId: "pos-elegant",
+        };
+
+        const SUPABASE_URL = 'https://atxolyuwiewfwbqpxmcu.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0eG9seXV3aWV3ZndicXB4bWN1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1NzAxMDUsImV4cCI6MjA4OTE0NjEwNX0.YZ4wcluD0AjMaijg-d0wLidF1NUYLEKsMZdQB7WQD4E';
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        const itemName = document.getElementById("itemName");
+        const itemPrice = document.getElementById("itemPrice");
+        const itemCategory = document.getElementById("itemCategory");
+        const itemImage = document.getElementById("itemImage");
+        const addItemBtn = document.getElementById("addItemBtn");
+        const menuItemsList = document.getElementById("menuItemsList");
+        const itemsCountDisplay = document.getElementById("itemsCountDisplay");
+        const lazyLoader = document.getElementById("lazyLoader");
+        const scrollSentinel = document.getElementById("scrollSentinel");
+        
+        const progressContainer = document.getElementById("uploadProgressContainer");
+        const progressBar = document.getElementById("uploadProgressBar");
+        const progressPercentage = document.getElementById("uploadPercentage");
+        const progressLabel = document.getElementById("progressLabel");
+        
+        const updateImageInput = document.getElementById("updateImageInput");
+        let activeUpdateKey = null;
+
+        // Lazy Loading State
+        let allItems = [];
+        let displayedCount = 0;
+        const BATCH_SIZE = 24;
+
+        const handleUpload = async (file, callback) => {
+            progressContainer.classList.remove("hidden");
+            progressBar.style.width = '0%';
+            progressPercentage.innerText = '0%';
+            
+            const fileName = `${Date.now()}_${file.name}`;
+            const filePath = `menu-items/${fileName}`;
+
+            // Supabase doesn't have a built-in progress listener for simple upload in the JS client without complex setups,
+            // so we'll simulate the progress for UX or use a workaround if needed.
+            // For now, we'll perform a standard upload and show a "Processing" state.
+            
+            progressBar.style.width = '50%';
+            progressPercentage.innerText = '50%';
+
+            try {
+                const { data, error } = await supabase.storage
+                    .from('menu-items')
+                    .upload(filePath, file, {
+                        cacheControl: '3600',
+                        upsert: false
+                    });
+
+                if (error) throw error;
+
+                progressBar.style.width = '100%';
+                progressPercentage.innerText = '100%';
+
+                const { data: { publicUrl } } = supabase.storage
+                    .from('menu-items')
+                    .getPublicUrl(filePath);
+
+                setTimeout(() => {
+                    progressContainer.classList.add("hidden");
+                    callback(publicUrl);
+                }, 500);
+
+            } catch (error) {
+                alert("Upload failed: " + error.message);
+                progressContainer.classList.add("hidden");
+            }
+        };
+
+        addItemBtn.onclick = async () => {
+            const name = itemName.value.trim();
+            const price = parseFloat(itemPrice.value);
+            const category = itemCategory.value;
+            const file = itemImage.files[0];
+
+            if (name && price >= 0) {
+                addItemBtn.disabled = true;
+                addItemBtn.innerText = "Processing...";
+                
+                const saveItem = (imageUrl) => {
+                    push(dbRef(db, "menuItems"), { name, price, category, imageUrl: imageUrl || "" }).then(() => {
+                        itemName.value = "";
+                        itemPrice.value = "";
+                        itemImage.value = "";
+                        addItemBtn.disabled = false;
+                        addItemBtn.innerText = "Add to Menu";
+                    });
+                };
+
+                if (file) {
+                    progressLabel.innerText = "Adding Item";
+                    handleUpload(file, saveItem);
+                } else {
+                    saveItem("");
+                }
+            } else {
+                alert("Please fill all fields correctly");
+            }
+        };
+
+        const renderBatch = () => {
+            const nextBatch = allItems.slice(displayedCount, displayedCount + BATCH_SIZE);
+            if (nextBatch.length === 0) {
+                lazyLoader.classList.add("hidden");
+                return;
+            }
+
+            nextBatch.forEach(item => {
+                const div = document.createElement("div");
+                div.className = "flex flex-col sm:flex-row items-center gap-4 p-4 glass rounded-xl group relative border border-white/5 hover:border-primary/30 transition-all";
+                div.innerHTML = `
+                    <div class="w-16 h-16 sm:w-14 sm:h-14 rounded-lg bg-slate-800 flex items-center justify-center text-primary overflow-hidden border border-slate-700 shrink-0 relative group/img">
+                        ${item.imageUrl ? `<img src="${item.imageUrl}" class="w-full h-full object-cover" loading="lazy" />` : '<span class="material-symbols-outlined">inventory_2</span>'}
+                        <button class="absolute inset-0 bg-black/60 opacity-0 group-hover/img:opacity-100 transition-all flex items-center justify-center text-white" onclick="triggerUpdateImage('${item.key}')">
+                            <span class="material-symbols-outlined text-sm">photo_camera</span>
+                        </button>
+                    </div>
+                    <div class="flex-1 text-center sm:text-left overflow-hidden w-full">
+                        <p class="font-bold text-sm lg:text-base truncate">${item.name}</p>
+                        <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">${item.category}</p>
+                    </div>
+                    <div class="flex items-center gap-4 sm:gap-6 shrink-0 mt-2 sm:mt-0">
+                        <p class="font-bold text-primary text-sm whitespace-nowrap">Rs. ${parseFloat(item.price).toLocaleString()}</p>
+                        <button class="text-red-500 hover:text-red-400 transition-all" onclick="deleteItem('${item.key}')">
+                            <span class="material-symbols-outlined text-xl">delete</span>
+                        </button>
+                    </div>
+                `;
+                menuItemsList.appendChild(div);
+            });
+
+            displayedCount += nextBatch.length;
+            if (displayedCount >= allItems.length) {
+                lazyLoader.classList.add("hidden");
+            } else {
+                lazyLoader.classList.remove("hidden");
+            }
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting && allItems.length > displayedCount) {
+                renderBatch();
+            }
+        }, { threshold: 0.1 });
+
+        observer.observe(scrollSentinel);
+
+        onValue(dbRef(db, "menuItems"), snapshot => {
+            allItems = [];
+            snapshot.forEach(child => {
+                allItems.push({ ...child.val(), key: child.key });
+            });
+            allItems.reverse(); // Newest first
+            
+            menuItemsList.innerHTML = "";
+            displayedCount = 0;
+            itemsCountDisplay.innerText = `${allItems.length} Items`;
+            renderBatch();
+        });
+
+        window.triggerUpdateImage = (key) => {
+            activeUpdateKey = key;
+            updateImageInput.click();
+        };
+
+        updateImageInput.onchange = (e) => {
+            const file = e.target.files[0];
+            if (file && activeUpdateKey) {
+                progressLabel.innerText = "Updating Photo";
+                handleUpload(file, (imageUrl) => {
+                    update(dbRef(db, `menuItems/${activeUpdateKey}`), { imageUrl }).then(() => {
+                        activeUpdateKey = null;
+                        updateImageInput.value = "";
+                    });
+                });
+            }
+        };
+
+        window.deleteItem = (key) => {
+            if (confirm("Remove this item?")) {
+                remove(dbRef(db, `menuItems/${key}`));
+            }
+        };
+    </script>
+</body>
+</html>

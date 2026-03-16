@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Outside POS - Luxe POS</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3274e7",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#111721",
+                    },
+                    fontFamily: { "display": ["Inter"] },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(50, 116, 231, 0.2);
+            border-radius: 10px;
+        }
+
+        .dark select option {
+            background-color: #111721;
+            color: #f1f5f9;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display min-h-screen flex overflow-hidden">
+    <!-- Sidebar -->
+    <aside
+        class="w-64 border-r border-slate-200 dark:border-slate-800 bg-background-light dark:bg-background-dark flex flex-col h-screen shrink-0">
+        <div class="p-6 flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white">
+                <span class="material-symbols-outlined">restaurant_menu</span>
+            </div>
+            <div>
+                <h1 class="text-lg font-bold tracking-tight">LUXE POS</h1>
+                <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">PREMIUM EDITION</p>
+            </div>
+        </div>
+        <nav class="flex-1 px-4 py-4 space-y-2 overflow-y-auto custom-scrollbar">
+            <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all"
+                href="pos.html">
+                <span class="material-symbols-outlined">receipt_long</span>
+                <span class="font-medium">POS Terminal</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all"
+                href="menu.html">
+                <span class="material-symbols-outlined">menu_book</span>
+                <span class="font-medium">Manage Menu</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all"
+                href="room_history.html">
+                <span class="material-symbols-outlined">history</span>
+                <span class="font-medium">History</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/10 text-primary border border-primary/20"
+                href="outside_pos.html">
+                <span class="material-symbols-outlined">local_shipping</span>
+                <span class="font-medium">Outside Bill</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all"
+                href="add_rooms.html">
+                <span class="material-symbols-outlined">door_front</span>
+                <span class="font-medium">Manage Rooms</span>
+            </a>
+        </nav>
+    </aside>
+
+    <main class="flex-1 flex flex-col h-screen overflow-hidden">
+        <header
+            class="h-16 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-8 shrink-0">
+            <div class="flex items-center gap-4">
+                <h2 class="text-xl font-semibold tracking-tight">Outside Guests</h2>
+                <span
+                    class="px-3 py-1 bg-blue-500/10 text-blue-500 text-xs font-bold rounded-full border border-blue-500/20">PUBLIC
+                    AREA</span>
+            </div>
+            <div class="flex items-center gap-6">
+                <div class="relative w-64">
+                    <span
+                        class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+                    <input
+                        class="w-full bg-slate-100 dark:bg-slate-800 border-none rounded-xl pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-primary transition-all text-slate-900 dark:text-slate-100 placeholder:text-slate-500"
+                        id="itemSearch" placeholder="Search menu items..." type="text" />
+                </div>
+            </div>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-6 custom-scrollbar">
+            <div class="mb-8 flex items-center gap-4 overflow-x-auto pb-4 custom-scrollbar" id="categoryFilter">
+                <button
+                    class="px-6 py-2 rounded-full bg-primary text-white font-medium whitespace-nowrap active-category"
+                    data-category="All">All Items</button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="itemsGrid"></div>
+        </div>
+    </main>
+
+    <!-- Cart Sidebar -->
+    <aside
+        class="w-[360px] border-l border-slate-200 dark:border-slate-800 bg-background-light dark:bg-background-dark flex flex-col h-screen shrink-0">
+        <div class="p-6 flex flex-col h-full uppercase-titles tracking-tight">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-bold">Order Cart</h2>
+                <button
+                    class="text-[10px] font-bold text-primary tracking-widest uppercase bg-primary/10 px-2 py-1 rounded-lg"
+                    id="clearCartBtn">Clear</button>
+            </div>
+
+            <div class="flex-1 overflow-y-auto custom-scrollbar pr-2 mb-8" id="cartItems"></div>
+
+            <div class="space-y-4 border-t border-slate-200 dark:border-slate-800 pt-6 mt-auto">
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-400 tracking-widest uppercase mb-1">Advance Payment (Rs.)</label>
+                    <input class="w-full bg-slate-100 dark:bg-slate-800 border-none rounded-lg py-2 px-3 text-sm focus:ring-1 focus:ring-primary text-slate-900 dark:text-slate-100" id="advancePayment" type="number" value="0"/>
+                </div>
+                <div class="flex gap-4">
+                    <div class="flex-1">
+                        <label class="block text-[10px] font-bold text-slate-400 tracking-widest uppercase mb-1">Service
+                            Charge (%)</label>
+                        <input
+                            class="w-full bg-slate-100 dark:bg-slate-800 border-none rounded-lg py-2 px-3 text-sm focus:ring-1 focus:ring-primary text-slate-900 dark:text-slate-100"
+                            id="serviceCharge" type="number" value="10" />
+                    </div>
+                    <div class="flex-1">
+                        <label
+                            class="block text-[10px] font-bold text-slate-400 tracking-widest uppercase mb-1">Discount
+                            (%)</label>
+                        <input
+                            class="w-full bg-slate-100 dark:bg-slate-800 border-none rounded-lg py-2 px-3 text-sm focus:ring-1 focus:ring-primary text-slate-900 dark:text-slate-100"
+                            id="discount" type="number" value="0" />
+                    </div>
+                </div>
+                <div class="space-y-2 py-4">
+                    <div class="flex justify-between text-slate-500 dark:text-slate-400 text-sm">
+                        <span>Subtotal</span>
+                        <span class="font-medium">Rs. <span id="subtotal">0.00</span></span>
+                    </div>
+                    <div class="flex justify-between text-slate-500 dark:text-slate-400 text-sm">
+                        <span>Service Charge</span>
+                        <span class="font-medium">Rs. <span id="serviceAmount">0.00</span></span>
+                    </div>
+                    <div class="flex justify-between text-red-500 text-sm">
+                        <span>Discount</span>
+                        <span class="font-medium">-Rs. <span id="discountAmount">0.00</span></span>
+                    </div>
+                </div>
+                <div class="flex justify-between items-end border-t border-slate-200 dark:border-slate-800 pt-4 mb-6">
+                    <div>
+                        <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Total Amount</p>
+                        <p class="text-3xl font-black text-primary">Rs. <span id="total">0.00</span></p>
+                    </div>
+                </div>
+                <button
+                    class="w-full py-3 rounded-xl bg-primary text-white font-bold hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-2"
+                    id="printBtn">
+                    <span class="material-symbols-outlined text-lg">print</span>
+                    Print Bill
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+        import { getDatabase, ref, onValue, push, serverTimestamp, get, set } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDXXbo3H7h7zbKcvEuNgYH6sFVLhqkjpOo",
+            authDomain: "pos-elegant.firebaseapp.com",
+            databaseURL: "https://pos-elegant-default-rtdb.firebaseio.com/",
+            projectId: "pos-elegant",
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        let items = [], cart = [];
+        let currentCategory = "All";
+        let searchTerm = "";
+
+        const itemsGrid = document.getElementById("itemsGrid");
+        const cartItemsDiv = document.getElementById("cartItems");
+        const categoryFilter = document.getElementById("categoryFilter");
+        const itemSearch = document.getElementById("itemSearch");
+        const subtotalElem = document.getElementById("subtotal");
+        const serviceAmountElem = document.getElementById("serviceAmount");
+        const discountAmountElem = document.getElementById("discountAmount");
+        const totalElem = document.getElementById("total");
+        const serviceChargeInput = document.getElementById("serviceCharge");
+        const discountInput = document.getElementById("discount");
+        const advancePaymentInput = document.getElementById("advancePayment");
+        const printBtn = document.getElementById("printBtn");
+        const clearCartBtn = document.getElementById("clearCartBtn");
+
+        onValue(ref(db, "menuItems"), snapshot => {
+            items = [];
+            snapshot.forEach(child => {
+                const data = child.val();
+                items.push({ ...data, id: child.key, category: data.category || "Other" });
+            });
+            renderCategories();
+            renderItems();
+        });
+
+        itemSearch.addEventListener("input", (e) => {
+            searchTerm = e.target.value.toLowerCase();
+            renderItems();
+        });
+
+        clearCartBtn.addEventListener("click", () => {
+            cart = [];
+            renderCart();
+        });
+
+        function renderCategories() {
+            const categories = ["All", ...new Set(items.map(i => i.category))].sort();
+            categoryFilter.innerHTML = "";
+            categories.forEach(cat => {
+                const btn = document.createElement("button");
+                btn.className = `px-6 py-2 rounded-full glass hover:bg-slate-100 dark:hover:bg-slate-800 transition-all whitespace-nowrap ${currentCategory === cat ? 'bg-primary text-white' : ''}`;
+                btn.innerText = cat === "All" ? "All Items" : cat;
+                btn.onclick = () => {
+                    currentCategory = cat;
+                    renderCategories();
+                    renderItems();
+                };
+                categoryFilter.appendChild(btn);
+            });
+        }
+
+        function renderItems() {
+            itemsGrid.innerHTML = "";
+            const filtered = items.filter(i =>
+                (currentCategory === "All" || i.category === currentCategory) &&
+                (i.name.toLowerCase().includes(searchTerm))
+            );
+
+            filtered.forEach(item => {
+                const card = document.createElement("div");
+                card.className = "glass rounded-2xl overflow-hidden group cursor-pointer hover:border-primary/50 transition-all";
+                card.innerHTML = `
+                    <div class="h-40 bg-center bg-cover bg-slate-800 flex items-center justify-center text-slate-500">
+                        <span class="material-symbols-outlined text-4xl">inventory_2</span>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-bold text-lg">${item.name}</h3>
+                            <span class="text-primary font-bold">Rs. ${parseFloat(item.price).toLocaleString()}</span>
+                        </div>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">${item.category}</p>
+                        <button class="w-full mt-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium opacity-0 group-hover:opacity-100 transition-all" onclick="addToCart('${item.id}')">Add to Order</button>
+                    </div>
+                `;
+                itemsGrid.appendChild(card);
+            });
+        }
+
+        window.addToCart = (id) => {
+            const item = items.find(i => i.id === id);
+            const existing = cart.find(i => i.id === id);
+            if (existing) existing.qty++;
+            else cart.push({ ...item, qty: 1 });
+            renderCart();
+        };
+
+        function renderCart() {
+            cartItemsDiv.innerHTML = "";
+            let subtotal = 0;
+
+            cart.forEach((item, index) => {
+                const itemTotal = item.price * item.qty;
+                subtotal += itemTotal;
+                const div = document.createElement("div");
+                div.className = "flex gap-4 items-center mb-4 p-2 glass rounded-xl";
+                div.innerHTML = `
+                    <div class="flex-1">
+                        <h4 class="font-semibold text-sm">${item.name}</h4>
+                        <div class="flex items-center gap-2 mt-1">
+                            <button class="w-6 h-6 rounded flex items-center justify-center bg-slate-800 text-slate-400 hover:text-white" onclick="updateQty(${index}, -1)">-</button>
+                            <span class="text-xs font-bold w-6 text-center">${item.qty}</span>
+                            <button class="w-6 h-6 rounded flex items-center justify-center bg-slate-800 text-slate-400 hover:text-white" onclick="updateQty(${index}, 1)">+</button>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="font-bold text-sm">Rs. ${itemTotal.toLocaleString()}</p>
+                        <button class="text-[10px] text-red-500 hover:text-red-400 font-bold uppercase tracking-widest mt-1" onclick="updateQty(${index}, -999)">Remove</button>
+                    </div>
+                `;
+                cartItemsDiv.appendChild(div);
+            });
+            updateTotals(subtotal);
+        }
+
+        window.updateQty = (index, delta) => {
+            cart[index].qty += delta;
+            if (cart[index].qty <= 0) cart.splice(index, 1);
+            renderCart();
+        };
+
+        function updateTotals(subtotal) {
+            const scPercent = parseFloat(serviceChargeInput.value || 0);
+            const dPercent = parseFloat(discountInput.value || 0);
+            const advance = parseFloat(advancePaymentInput.value || 0);
+
+            const scAmount = subtotal * scPercent / 100;
+            const dAmount = subtotal * dPercent / 100;
+            const total = subtotal + scAmount - dAmount - advance;
+
+            subtotalElem.innerText = subtotal.toLocaleString(undefined, { minimumFractionDigits: 2 });
+            serviceAmountElem.innerText = scAmount.toLocaleString(undefined, { minimumFractionDigits: 2 });
+            discountAmountElem.innerText = dAmount.toLocaleString(undefined, { minimumFractionDigits: 2 });
+            totalElem.innerText = total.toLocaleString(undefined, { minimumFractionDigits: 2 });
+        }
+
+        serviceChargeInput.oninput = renderCart;
+        discountInput.oninput = renderCart;
+        advancePaymentInput.oninput = renderCart;
+
+        printBtn.addEventListener("click", async () => {
+            if (cart.length === 0) return alert("Cart is empty");
+
+            // Generate Invoice Number
+            const counterRef = ref(db, "invoiceCounter");
+            const counterSnap = await get(counterRef);
+            let invoiceNo = 1;
+            if (counterSnap.exists()) invoiceNo = counterSnap.val() + 1;
+            await set(counterRef, invoiceNo);
+            const invoiceNumber = "OUT-" + String(invoiceNo).padStart(3, "0");
+
+            // Receipt formatting (similar to pos.html)
+            const lineWidth = 42;
+            const padR = (t, l) => t + " ".repeat(Math.max(0, l - t.length));
+            const padL = (t, l) => " ".repeat(Math.max(0, l - t.length)) + t;
+            const center = (t) => " ".repeat(Math.max(0, (lineWidth - t.length) / 2)) + t;
+            const dateStr = new Date().toLocaleString();
+
+            let receipt = "\n\n\n";
+            receipt += center("ELEGANT HOTEL") + "\n\n";
+            receipt += center("Sunflower Garden, Meewaladeniya") + "\n";
+            receipt += center("Handessa") + "\n\n";
+            receipt += `Invoice : ${invoiceNumber}\nGuest   : Outside Guest\nDate    : ${dateStr}\n\n`;
+            receipt += "-".repeat(lineWidth) + "\n";
+            receipt += padR("ITEM", 20) + padL("QTY", 5) + padL("PRICE", 10) + "\n";
+            receipt += "-".repeat(lineWidth) + "\n";
+
+            let subtotal = 0;
+            cart.forEach(item => {
+                const total = item.price * item.qty;
+                subtotal += total;
+                receipt += padR(item.name.substring(0, 20), 20) + padL(item.qty.toString(), 5) + padL(total.toFixed(0), 10) + "\n";
+            });
+
+            const scPercent = parseFloat(serviceChargeInput.value || 0);
+            const dPercent = parseFloat(discountInput.value || 0);
+            const advance = parseFloat(advancePaymentInput.value || 0);
+            const scAmount = subtotal * scPercent / 100;
+            const dAmount = subtotal * dPercent / 100;
+            const grandTotal = subtotal + scAmount - dAmount - advance;
+
+            receipt += "-".repeat(lineWidth) + "\n";
+            receipt += padR("SUBTOTAL", 30) + padL(subtotal.toFixed(0), 12) + "\n";
+            receipt += padR(`SERVICE (${scPercent}%)`, 30) + padL(scAmount.toFixed(0), 12) + "\n";
+            receipt += padR(`DISCOUNT (${dPercent}%)`, 30) + padL(dAmount.toFixed(0), 12) + "\n";
+            if (advance > 0) {
+                receipt += padR("ADVANCE PAYMENT", 30) + padL("-" + advance.toFixed(0), 12) + "\n";
+            }
+            receipt += "-".repeat(lineWidth) + "\n";
+            receipt += padR("TOTAL DUE", 30) + padL(grandTotal.toFixed(0), 12) + "\n";
+            receipt += "-".repeat(lineWidth) + "\n\n";
+            receipt += center("Thank you for your visit!") + "\n\n\n";
+
+            const pWin = window.open('', '', 'width=300,height=900');
+            pWin.document.write(`<pre style="font-family: monospace; font-size: 12px;">${receipt}</pre>`);
+            pWin.document.close();
+            pWin.print();
+            pWin.close();
+
+            await push(ref(db, "sales"), {
+                invoice: invoiceNumber,
+                guestType: "outside",
+                items: cart,
+                subTotal: subtotal,
+                servicePercent: scPercent,
+                serviceAmount: scAmount,
+                discountPercent: dPercent,
+                discountAmount: dAmount,
+                advancePayment: advance,
+                total: grandTotal,
+                timestamp: serverTimestamp()
+            });
+
+            cart = [];
+            renderCart();
+        });
+    </script>
+</body>
+
+</html>
