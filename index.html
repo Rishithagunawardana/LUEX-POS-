@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>LUXE POS | Premium Terminal</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3274e7",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#0a0d12",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        .glass-panel {
+            background: rgba(17, 23, 33, 0.45);
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+        }
+        .bg-luxury {
+            background-color: #0a0d12;
+            background-image: radial-gradient(at 0% 0%, rgba(50, 116, 231, 0.15) 0px, transparent 50%),
+                              radial-gradient(at 100% 100%, rgba(50, 116, 231, 0.1) 0px, transparent 50%);
+        }
+        @keyframes mesh-gradient {
+            0% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(5%, 5%) scale(1.1); }
+            66% { transform: translate(-5%, 10%) scale(0.9); }
+            100% { transform: translate(0, 0) scale(1); }
+        }
+        .mesh-blob {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            filter: blur(80px);
+            opacity: 0.15;
+            z-index: 0;
+            animation: mesh-gradient 20s infinite alternate ease-in-out;
+        }
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) skewX(-15deg); }
+            100% { transform: translateX(200%) skewX(-15deg); }
+        }
+        .shimmer-btn {
+            position: relative;
+            overflow: hidden;
+        }
+        .shimmer-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.2), transparent);
+            animation: shimmer 3s infinite;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
+        }
+        .shake { animation: shake 0.3s ease-in-out; }
+    </style>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+    <div class="relative flex min-h-screen w-full flex-col bg-luxury items-center justify-center p-4 overflow-hidden">
+        <div class="mesh-blob bg-primary top-[-20%] left-[-10%]"></div>
+        <div class="mesh-blob bg-blue-400 bottom-[-20%] right-[-10%]" style="animation-delay: -5s; opacity: 0.1;"></div>
+        <div class="absolute inset-0 bg-gradient-to-tr from-primary/10 via-transparent to-transparent pointer-events-none"></div>
+        
+        <!-- Snowfall Canvas -->
+        <canvas id="snowCanvas" class="absolute inset-0 pointer-events-none z-[1]"></canvas>
+        
+        <div class="w-full max-w-md z-10 transition-all duration-1000" id="loginWrapper">
+            <div class="flex flex-col items-center mb-6 mt-4">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="text-primary size-10">
+                        <svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                            <path clip-rule="evenodd" d="M24 0.757355L47.2426 24L24 47.2426L0.757355 24L24 0.757355ZM21 35.7574V12.2426L9.24264 24L21 35.7574Z" fill="currentColor" fill-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <h1 class="text-white text-3xl font-bold tracking-tight uppercase" style="letter-spacing: 0.15em;">Luxe POS</h1>
+                </div>
+                <p class="text-slate-300 font-light tracking-wide">Excellence in Service Management</p>
+            </div>
+            
+            <div class="glass-panel rounded-xl p-6 shadow-2xl transition-all duration-700" id="loginCard">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-semibold text-white mb-2">Welcome Back</h2>
+                    <p class="text-slate-400 text-sm" id="statusMessage">Please enter your terminal credentials to continue.</p>
+                </div>
+                <form class="space-y-4" id="loginForm">
+                    <div>
+                        <label class="block text-xs font-semibold text-primary uppercase tracking-widest mb-2" for="staff-id">Staff Identification</label>
+                        <div class="relative group">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <span class="material-symbols-outlined text-slate-500 group-focus-within:text-primary transition-colors text-[20px]">badge</span>
+                            </div>
+                            <input class="w-full bg-background-dark/50 border border-slate-700 focus:border-primary focus:ring-1 focus:ring-primary rounded-lg py-3 pl-12 pr-4 text-white placeholder:text-slate-600 transition-all outline-none" id="staff-id" placeholder="Enter Staff ID or Email" type="text" required/>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="block text-xs font-semibold text-primary uppercase tracking-widest" for="pin">Security PIN / Password</label>
+                            <a class="text-xs text-slate-500 hover:text-primary transition-colors" href="#">Forgot PIN?</a>
+                        </div>
+                        <div class="relative group">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <span class="material-symbols-outlined text-slate-500 group-focus-within:text-primary transition-colors text-[20px]">lock</span>
+                            </div>
+                            <input class="w-full bg-background-dark/50 border border-slate-700 focus:border-primary focus:ring-1 focus:ring-primary rounded-lg py-3 pl-12 pr-4 text-white placeholder:text-slate-600 transition-all outline-none focus:ring-offset-2 focus:ring-offset-background-dark/50" id="pin" placeholder="••••" type="password" required/>
+                        </div>
+                    </div>
+                    <div class="pt-4">
+                        <button class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-3 rounded-lg shadow-lg shadow-primary/20 transition-all transform active:scale-[0.98] flex items-center justify-center gap-2 shimmer-btn disabled:opacity-50 disabled:cursor-not-allowed" id="loginBtn" type="submit">
+                            <span id="btnText">SIGN IN TO TERMINAL</span>
+                            <span class="material-symbols-outlined text-[18px]" id="btnIcon">arrow_forward</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="mt-8 flex justify-between items-center px-4">
+                <div class="flex items-center gap-4 text-slate-500 text-sm">
+                    <div class="flex items-center gap-1">
+                        <span class="size-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                        <span>Server Online</span>
+                    </div>
+                    <span>v4.2.0</span>
+                </div>
+                <button class="flex items-center gap-2 text-slate-500 hover:text-white transition-colors text-sm">
+                    <span class="material-symbols-outlined text-[20px]">settings</span>
+                    <span>System Settings</span>
+                </button>
+            </div>
+        </div>
+        
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 text-slate-600 text-[10px] tracking-[0.2em] uppercase whitespace-nowrap">
+            © 2026 LUXE Hospitality Solutions. All rights reserved.
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDXXbo3H7h7zbKcvEuNgYH6sFVLhqkjpOo",
+            authDomain: "pos-elegant.firebaseapp.com",
+            databaseURL: "https://pos-elegant-default-rtdb.firebaseio.com/",
+            projectId: "pos-elegant",
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        const loginForm = document.getElementById("loginForm");
+        const staffIdInput = document.getElementById("staff-id");
+        const pinInput = document.getElementById("pin");
+        const loginBtn = document.getElementById("loginBtn");
+        const btnText = document.getElementById("btnText");
+        const btnIcon = document.getElementById("btnIcon");
+        const statusMessage = document.getElementById("statusMessage");
+        const loginCard = document.getElementById("loginCard");
+        const loginWrapper = document.getElementById("loginWrapper");
+
+        loginForm.onsubmit = async (e) => {
+            e.preventDefault();
+            
+            const staffId = staffIdInput.value.trim();
+            const password = pinInput.value;
+
+            // Simple validation mapping: If only ID is provided, assume it's part of an email or handled by Firebase
+            // Usually, developers use custom claims or specific email formats for POS.
+            // For now, we'll try to sign in with whatever they provide.
+            let email = staffId;
+            if (!email.includes("@")) {
+                email = `${staffId}@pos-elegant.com`; // Fallback format
+            }
+
+            // UI Feedback
+            loginBtn.disabled = true;
+            btnText.innerText = "AUTHENTICATING...";
+            btnIcon.innerText = "sync";
+            btnIcon.classList.add("animate-spin");
+            statusMessage.innerText = "Verifying credentials with secure server...";
+            statusMessage.classList.remove("text-red-400");
+            statusMessage.classList.add("text-slate-400");
+            loginCard.classList.remove("shake");
+
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                
+                // Success animation
+                statusMessage.innerText = "Access Granted. Redirecting to terminal...";
+                statusMessage.classList.remove("text-slate-400");
+                statusMessage.classList.add("text-emerald-400");
+                loginBtn.classList.remove("bg-primary");
+                loginBtn.classList.add("bg-emerald-600");
+                btnIcon.innerText = "check_circle";
+                btnIcon.classList.remove("animate-spin");
+                
+                loginWrapper.style.opacity = "0";
+                loginWrapper.style.transform = "scale(0.95)";
+                
+                setTimeout(() => {
+                    window.location.href = "pos.html";
+                }, 800);
+
+            } catch (error) {
+                console.error("Login Error:", error);
+                
+                // Error animation
+                loginBtn.disabled = false;
+                btnText.innerText = "SIGN IN TO TERMINAL";
+                btnIcon.innerText = "arrow_forward";
+                btnIcon.classList.remove("animate-spin");
+                
+                statusMessage.innerText = "Authentication failed. Invalid Staff ID or PIN.";
+                statusMessage.classList.remove("text-slate-400");
+                statusMessage.classList.add("text-red-400");
+                
+                loginCard.classList.add("shake");
+                setTimeout(() => loginCard.classList.remove("shake"), 500);
+            }
+        };
+
+        // Snowfall Effect
+        const canvas = document.getElementById('snowCanvas');
+        const ctx = canvas.getContext('2d');
+        let width, height, flakes = [];
+
+        function initSnow() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            flakes = [];
+            for (let i = 0; i < 150; i++) {
+                flakes.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    size: Math.random() * 3 + 1,
+                    speed: Math.random() * 1 + 0.5,
+                    opacity: Math.random() * 0.5 + 0.3,
+                    velX: Math.random() * 0.5 - 0.25
+                });
+            }
+        }
+
+        function drawSnow() {
+            ctx.clearRect(0, 0, width, height);
+            ctx.fillStyle = '#fff';
+            flakes.forEach(f => {
+                ctx.beginPath();
+                ctx.arc(f.x, f.y, f.size, 0, Math.PI * 2);
+                ctx.globalAlpha = f.opacity;
+                ctx.fill();
+                
+                f.y += f.speed;
+                f.x += f.velX;
+                
+                if (f.y > height) f.y = -10;
+                if (f.x > width) f.x = 0;
+                if (f.x < 0) f.x = width;
+            });
+            requestAnimationFrame(drawSnow);
+        }
+
+        window.addEventListener('resize', initSnow);
+        initSnow();
+        drawSnow();
+    </script>
+</body>
+</html>

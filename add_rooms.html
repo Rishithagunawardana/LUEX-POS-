@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Manage Rooms - Luxe POS</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3274e7",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#111721",
+                    },
+                    fontFamily: { "display": ["Inter"] },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(50, 116, 231, 0.2); border-radius: 10px; }
+        .dark select option { background-color: #111721; color: #f1f5f9; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display min-h-screen flex overflow-hidden">
+    <!-- Sidebar -->
+    <aside class="w-64 border-r border-slate-200 dark:border-slate-800 bg-background-light dark:bg-background-dark flex flex-col h-screen shrink-0">
+        <div class="p-6 flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white">
+                <span class="material-symbols-outlined">restaurant_menu</span>
+            </div>
+            <div>
+                <h1 class="text-lg font-bold tracking-tight">LUXE POS</h1>
+                <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">PREMIUM EDITION</p>
+            </div>
+        </div>
+        <nav class="flex-1 px-4 py-4 space-y-2 overflow-y-auto custom-scrollbar">
+            <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all" href="pos.html">
+                <span class="material-symbols-outlined">receipt_long</span>
+                <span class="font-medium">POS Terminal</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all" href="menu.html">
+                <span class="material-symbols-outlined">menu_book</span>
+                <span class="font-medium">Manage Menu</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all" href="room_history.html">
+                <span class="material-symbols-outlined">history</span>
+                <span class="font-medium">History</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all" href="outside_pos.html">
+                <span class="material-symbols-outlined">local_shipping</span>
+                <span class="font-medium">Outside Bill</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/10 text-primary border border-primary/20" href="add_rooms.html">
+                <span class="material-symbols-outlined">door_front</span>
+                <span class="font-medium">Manage Rooms</span>
+            </a>
+        </nav>
+    </aside>
+
+    <main class="flex-1 overflow-y-auto p-6 lg:p-10 custom-scrollbar">
+        <header class="mb-6">
+            <h2 class="text-2xl font-bold tracking-tight">Manage Rooms</h2>
+            <p class="text-slate-500 mt-2 text-sm">Configure suites and room rates</p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+            <!-- Form -->
+            <div class="lg:col-span-1">
+                <div class="glass p-6 rounded-2xl sticky top-6">
+                    <h3 class="text-lg font-bold mb-4">Add Room</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-400 mb-2">Category</label>
+                            <input class="w-full glass border-none rounded-xl py-3 px-4 focus:ring-2 focus:ring-primary text-slate-900 dark:text-slate-100" id="roomCat" placeholder="e.g. Deluxe Suite" type="text"/>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-400 mb-2">Room Number/Name</label>
+                            <input class="w-full glass border-none rounded-xl py-3 px-4 focus:ring-2 focus:ring-primary text-slate-900 dark:text-slate-100" id="roomNum" placeholder="e.g. 204" type="text"/>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-400 mb-2">Base Rate (Rs.)</label>
+                            <input class="w-full glass border-none rounded-xl py-3 px-4 focus:ring-2 focus:ring-primary text-slate-900 dark:text-slate-100" id="roomRate" placeholder="0.00" type="number"/>
+                        </div>
+                        <button class="w-full py-4 rounded-xl bg-primary text-white font-bold hover:bg-primary/90 transition-all mt-4" id="addRoomBtn">Register Room</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- List -->
+            <div class="lg:col-span-2">
+                <div class="glass p-8 rounded-2xl flex flex-col h-[75vh]">
+                    <div class="flex items-center justify-between mb-6 shrink-0">
+                        <h3 class="text-xl font-bold">Active Rooms</h3>
+                        <div class="text-xs font-bold text-slate-500 uppercase tracking-widest" id="roomsCountDisplay">0 Rooms</div>
+                    </div>
+                    <div class="flex-1 overflow-y-auto pr-4 custom-scrollbar space-y-4" id="roomsScrollContainer">
+                        <div class="space-y-4" id="roomsList">
+                            <!-- Rooms will be loaded here -->
+                        </div>
+                        <!-- Sentinel for Lazy Loading -->
+                        <div id="scrollSentinel" class="h-10 flex items-center justify-center">
+                            <div class="w-6 h-6 border-2 border-primary/30 border-t-primary rounded-full animate-spin hidden" id="lazyLoader"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+        import { getDatabase, ref, onValue, push, remove, update } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDXXbo3H7h7zbKcvEuNgYH6sFVLhqkjpOo",
+            authDomain: "pos-elegant.firebaseapp.com",
+            databaseURL: "https://pos-elegant-default-rtdb.firebaseio.com/",
+            projectId: "pos-elegant",
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        const roomCat = document.getElementById("roomCat");
+        const roomNum = document.getElementById("roomNum");
+        const roomRate = document.getElementById("roomRate");
+        const addRoomBtn = document.getElementById("addRoomBtn");
+        const roomsList = document.getElementById("roomsList");
+        const roomsCountDisplay = document.getElementById("roomsCountDisplay");
+        const lazyLoader = document.getElementById("lazyLoader");
+        const scrollSentinel = document.getElementById("scrollSentinel");
+
+        // Lazy Loading State
+        let allRooms = [];
+        let displayedCount = 0;
+        const BATCH_SIZE = 24;
+
+        addRoomBtn.onclick = () => {
+            const category = roomCat.value.trim();
+            const number = roomNum.value.trim();
+            const rate = parseFloat(roomRate.value);
+
+            // Validation to prevent dangerous paths and empty fields
+            if (!category || !number || isNaN(rate) || rate < 0) {
+                alert("Please fill all fields with valid data");
+                return;
+            }
+
+            if (number.includes("/") || number === ".." || number === ".") {
+                alert("Invalid characters in room number/name. Slashes and '.' are not allowed.");
+                return;
+            }
+
+            push(ref(db, "rooms"), { category, number, rate }).then(() => {
+                roomCat.value = "";
+                roomNum.value = "";
+                roomRate.value = "";
+            });
+        };
+
+        const renderBatch = () => {
+            const nextBatch = allRooms.slice(displayedCount, displayedCount + BATCH_SIZE);
+            if (nextBatch.length === 0) {
+                lazyLoader.classList.add("hidden");
+                return;
+            }
+
+            nextBatch.forEach(room => {
+                const div = document.createElement("div");
+                div.className = "flex items-center justify-between p-4 glass rounded-xl group border border-white/5 hover:border-primary/30 transition-all";
+                div.innerHTML = `
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center text-primary border border-slate-700">
+                            <span class="material-symbols-outlined">meeting_room</span>
+                        </div>
+                        <div>
+                            <p class="font-bold text-sm">Room ${room.number}</p>
+                            <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">${room.category}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 lg:gap-8">
+                        <div class="text-right">
+                            <p class="font-bold text-sm text-primary">Rs. ${parseFloat(room.rate).toLocaleString()}</p>
+                            <p class="text-[10px] text-slate-500 uppercase tracking-widest">Base Rate</p>
+                        </div>
+                        <div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all">
+                            <button class="p-2 rounded-lg bg-slate-800 text-slate-400 hover:text-primary transition-colors" title="Print" onclick="printRoom('${room.number}', '${room.category}', ${room.rate})">
+                                <span class="material-symbols-outlined text-sm">print</span>
+                            </button>
+                            <button class="p-2 rounded-lg bg-slate-800 text-slate-400 hover:text-emerald-500 transition-colors" title="Edit Rate" onclick="editRate('${room.key}', ${room.rate})">
+                                <span class="material-symbols-outlined text-sm">edit</span>
+                            </button>
+                            <button class="p-2 rounded-lg bg-slate-800 text-slate-400 hover:text-red-500 transition-colors" title="Delete" onclick="deleteRoom('${room.key}')">
+                                <span class="material-symbols-outlined text-sm">delete</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                roomsList.appendChild(div);
+            });
+
+            displayedCount += nextBatch.length;
+            if (displayedCount >= allRooms.length) {
+                lazyLoader.classList.add("hidden");
+            } else {
+                lazyLoader.classList.remove("hidden");
+            }
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting && allRooms.length > displayedCount) {
+                renderBatch();
+            }
+        }, { threshold: 0.1 });
+
+        observer.observe(scrollSentinel);
+
+        onValue(ref(db, "rooms"), snapshot => {
+            allRooms = [];
+            snapshot.forEach(child => {
+                allRooms.push({ ...child.val(), key: child.key });
+            });
+            allRooms.reverse(); // Newest first
+
+            roomsList.innerHTML = "";
+            displayedCount = 0;
+            roomsCountDisplay.innerText = `${allRooms.length} Rooms`;
+            renderBatch();
+        });
+
+        window.deleteRoom = (key) => {
+            if (confirm("Delete this room configuration?")) {
+                remove(ref(db, `rooms/${key}`));
+            }
+        };
+
+        window.editRate = (key, currentRate) => {
+            const newRate = prompt("Enter new base rate for this room (Rs.):", currentRate);
+            if (newRate !== null && !isNaN(parseFloat(newRate)) && parseFloat(newRate) >= 0) {
+                update(ref(db, `rooms/${key}`), { rate: parseFloat(newRate) });
+            }
+        };
+
+        window.printRoom = (roomNum, category, rate) => {
+            const lineWidth = 42;
+            const center = (t) => " ".repeat(Math.max(0, (lineWidth - t.length) / 2)) + t;
+            const padR = (t, l) => t + " ".repeat(Math.max(0, l - t.length));
+            const padL = (t, l) => " ".repeat(Math.max(0, l - t.length)) + t;
+            const dateStr = new Date().toLocaleString();
+
+            let receipt = "\n\n\n";
+            receipt += center("ELEGANT HOTEL") + "\n\n";
+            receipt += center("Sunflower Garden, Meewaladeniya") + "\n";
+            receipt += center("Handessa") + "\n\n";
+            receipt += `Room Number : ${roomNum}\n`;
+            receipt += `Category    : ${category}\n`;
+            receipt += `Date        : ${dateStr}\n\n`;
+            receipt += "-".repeat(lineWidth) + "\n";
+            receipt += padR("DESCRIPTION", 30) + padL("RATE", 12) + "\n";
+            receipt += "-".repeat(lineWidth) + "\n";
+            receipt += padR("Base Room Rate", 30) + padL(parseFloat(rate).toFixed(0), 12) + "\n";
+            receipt += "-".repeat(lineWidth) + "\n";
+            receipt += padR("TOTAL RATE", 30) + padL(parseFloat(rate).toFixed(0), 12) + "\n";
+            receipt += "-".repeat(lineWidth) + "\n\n";
+            receipt += center("Premium Luxury Stay") + "\n\n\n";
+
+            const pWin = window.open('', '', 'width=400,height=600');
+            pWin.document.write(`<pre style="font-family: monospace; font-size: 14px; padding: 20px;">${receipt}</pre>`);
+            pWin.document.close();
+            pWin.print();
+            pWin.close();
+        };
+    </script>
+</body>
+</html>
